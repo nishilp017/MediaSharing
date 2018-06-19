@@ -21,7 +21,7 @@ namespace WebRole1.BlobAccess
                     CloudStorageAccount.Parse(Microsoft.Azure.CloudConfigurationManager.GetSetting("ConnectionString"));
                 var cloudTableClient = storageAccount.CreateCloudBlobClient();
 
-                var container = cloudTableClient.GetContainerReference("filesContainer");
+                var container = cloudTableClient.GetContainerReference("filescontainer");
                 await container.CreateIfNotExistsAsync();
 
                 var blobReference = container.GetBlockBlobReference(file.FileName.ToLowerInvariant());
@@ -46,30 +46,32 @@ namespace WebRole1.BlobAccess
 
         }
 
-        private async Task<HttpResponseMessage> DownloadFileAsync(string fileName)
+        public async Task<HttpResponseMessage> DownloadFileAsync(string fileName)
         {
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(Microsoft.Azure.CloudConfigurationManager.GetSetting("ConnectionString"));
             var cloudTableClient = storageAccount.CreateCloudBlobClient();
 
-            var container = cloudTableClient.GetContainerReference("filesContainer");
+            var container = cloudTableClient.GetContainerReference("filescontainer");
             await container.CreateIfNotExistsAsync();
 
             var blobReference = container.GetBlockBlobReference(fileName.ToLowerInvariant());
 
             if (blobReference.Exists())
             {
-                var stream = new MemoryStream();
-                await blobReference.DownloadToStreamAsync(stream);
-                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                var stream = await blobReference.OpenReadAsync();
 
-                result.Content = new StreamContent(stream);
+                var result =
+                    new HttpResponseMessage(HttpStatusCode.OK) {Content = new StreamContent(stream)};
+
+                result.Content.Headers.ContentLength = blobReference.Properties.Length;
                 result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = fileName
+                    FileName = fileName,
+                    Size = blobReference.Properties.Length
                 };
 
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue(blobReference.Properties.ContentType);
                 return result;
             }
             else

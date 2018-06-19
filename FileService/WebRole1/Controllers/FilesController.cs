@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -26,6 +27,12 @@ namespace WebRole1.Controllers
             {
                 throw;
             }
+        }
+
+        public async Task<HttpResponseMessage> GetFile([FromUri] string id)
+        {
+            var fileManager = new FileManager();
+            return await fileManager.DownloadFile(id);
         }
     }
 }
