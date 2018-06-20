@@ -38,7 +38,6 @@
             var data = new FormData();
             var text = $("#fileid").val();
             console.log(text);
-            window.open("http://localhost:50126/api/files?id=" + text);
             var ajaxRequest = $.ajax({
                 type: "GET",
                 url: "api/files?id=" + text,
