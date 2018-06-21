@@ -16,6 +16,7 @@ JavaScript for the UI Upload and Download functinalities
 Cloud Service Url: http://webrole120180618082139.azurewebsites.net/
 
 UI Url : http://webrole120180618082139.azurewebsites.net/
+
 Endpoints:
 
 1. POST http://webrole120180618082139.azurewebsites.net/api/files for Upload 
