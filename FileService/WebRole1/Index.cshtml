@@ -1,96 +1,75 @@
-﻿@{
-    ViewBag.Title = "Upload";
-}
-<h2>Upload</h2>
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+﻿<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script>
 
     $(document).ready(function ()
     {
+        $("#loading").hide();
         $('#btnUploadFile').on('click', function () {
             var data = new FormData();
             var files = $("#fileUpload").get(0).files;
-            // Add the uploaded image content to the form data collection
+
             if (files.length > 0) {
                 data.append("UploadedImage", files[0]);
             }
-            // Make Ajax request with the contentType = false, and procesDate = false
+
             var ajaxRequest = $.ajax({
                 type: "POST",
                 url: "api/files",
+                async: false,
                 contentType: false,
                 processData: false,
-                data: data
-            });
-            ajaxRequest.done(function (data) {
-                status = data;
-                if (status == "success") {
-                    alert(data);
+                timeout: 30000,
+                beforeSend: function () {
+                    $("#loading").show();
+                },
+                data: data,
+                success : function (message) {
+                    $("#loading").hide();
+                    alert(message);
+                },
+                error: function(message) {
+                    $("#loading").hide();
+                    alert(message);
                 }
-            });
-            ajaxRequest.fail(function (data) {
-                status = data;
-                alert("failed");
-                
             });
         });
         $('#btnDownloadFile').on('click', function () {
             var data = new FormData();
             var text = $("#fileid").val();
             console.log(text);
-            var ajaxRequest = $.ajax({
-                type: "GET",
-                url: "api/files?id=" + text,
-                contentType: false,
-                processData: false,
-                data: data
-            });
+            var ajaxRequest = window.open("api/files?id=" + text);
             ajaxRequest.done(function (data) {
-                status = data;
-                if (status == "success") {
-                    alert(data);
-                }
+                alert("downloaded");
             });
             ajaxRequest.fail(function (data) {
-                status = data;
                 alert("failed");
 
             });
         });
     });
 </script>
-@*<script>
-
-    $(document).ready(function () {
-        $('#btnDownloadFile').on('click', function () {
-            var data = new FormData();
-            var text = $("#fileid").value();
-            var ajaxRequest = $.ajax({
-                type: "GET",
-                url: "api/files?id=" + text,
-                contentType: false,
-                processData: false,
-                data: data
-            });
-            ajaxRequest.done(function (data) {
-                status = data;
-                if (status == "success") {
-                    alert(data);
-                }
-            });
-            ajaxRequest.fail(function (data) {
-                status = data;
-                alert("failed");
-
-            });
-        });
-    });
-</script>*@
 <div>
-    <input type="file" name="FileUpload1" id="fileUpload" /><br />
-    <input id="btnUploadFile" type="button" value="Upload File" />
-</div>
-<div>
-    <input type="text" name="fileid" id="fileid" /><br />
-    <input id="btnDownloadFile" type="button" value="Download" />
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <h2>Upload</h2>
+                    <input type="file" name="FileUpload1" id="fileUpload" size="100"/><br />
+                    <input id="btnUploadFile" type="button" value="Upload File" />
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    <br /><br />
+                    <img src= "ajax-loader.gif" id="loading" alt="animated" />
+                    <br /><br /><br /><br /><br /><br /><br /><br />
+                    <h2>Download</h2>
+                    <input type="text" name="fileid" id="fileid" size="50"/><br />
+                    <input id="btnDownloadFile" type="button" value="Download" />
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

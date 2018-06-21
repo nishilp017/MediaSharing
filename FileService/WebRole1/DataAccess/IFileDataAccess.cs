@@ -12,5 +12,7 @@ namespace WebRole1.DataAccess
         Task<string> WriteFileAsync(FileEntity entity);
 
         Task<TableEntity> GetFileAsync(string fileId);
+
+        Task<IEnumerable<FileEntity>> GetAllFilesAsync();
     }
 }

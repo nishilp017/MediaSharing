@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using WebRole1.DataAccess;
 using WebRole1.Manager;
+using WebRole1.Models;
 
 namespace WebRole1.Controllers
 {
@@ -33,6 +35,17 @@ namespace WebRole1.Controllers
         {
             var fileManager = new FileManager();
             return await fileManager.DownloadFile(id);
+        }
+
+        public async Task<IEnumerable<FileResultModel>> GetAllFile()
+        {
+            var fileManager = new FileManager();
+            return (await fileManager.GetAllFiles())?.Select(c => new FileResultModel
+            {
+                FileName = c.RowKey,
+                FileId = c.PartitionKey,
+                ContentLength = c.ContentLength
+            }).ToList();
         }
     }
 }

@@ -8,10 +8,17 @@ namespace WebRole1.DataAccess
 {
     public class FileEntity : TableEntity
     {
-        public FileEntity(string fileName, string fileId)
+        public FileEntity()
+        {
+        }
+
+        public FileEntity(string fileName, string fileId, string contentLength)
         {
             this.PartitionKey = fileId;
             this.RowKey = fileName;
+            this.ContentLength = contentLength;
         }
+
+        public string ContentLength { get; set; }
     }
 }

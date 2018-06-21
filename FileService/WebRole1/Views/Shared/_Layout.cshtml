@@ -6,6 +6,43 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+        <style>
+            .split {
+                height: 100%;
+                width: 50%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                overflow-x: hidden;
+                padding-top: 20px;
+            }
+
+            /* Control the left side */
+            .left {
+                left: 0;
+            }
+
+            /* Control the right side */
+            .right {
+                right: 0;
+            }
+
+            /* If you want the content centered horizontally and vertically */
+            .centered {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+            /* Style the image inside the centered container, if needed */
+            .centered img {
+                width: 150px;
+                border-radius: 50%;
+            }
+
+        </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -16,7 +53,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("File Sharing App", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -26,11 +63,11 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div>
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Developed by Nishil Prajapati</p>
         </footer>
     </div>
 

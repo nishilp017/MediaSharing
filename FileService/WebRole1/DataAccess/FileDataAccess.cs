@@ -41,5 +41,26 @@ namespace WebRole1.DataAccess
 
             return firstEntry;
         }
+
+        public async Task<IEnumerable<FileEntity>> GetAllFilesAsync()
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Microsoft.Azure.CloudConfigurationManager.GetSetting("ConnectionString"));
+            var cloudTableClient = storageAccount.CreateCloudTableClient();
+
+            var filesTable = cloudTableClient.GetTableReference("files");
+
+            var files = new List<FileEntity>();
+            TableContinuationToken token = null;
+            TableQuery<FileEntity> query = new TableQuery<FileEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.GreaterThan, String.Empty));
+
+            do
+            {
+                TableQuerySegment<FileEntity> resultSegment = await filesTable.ExecuteQuerySegmentedAsync(query, token);
+                token = resultSegment.ContinuationToken;
+                files.AddRange(resultSegment.Results);
+            } while (token != null);
+
+            return files;
+        }
     }
 }

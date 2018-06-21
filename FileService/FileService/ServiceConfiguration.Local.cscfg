@@ -4,6 +4,7 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="98a41724-3481-4f04-80ad-571aeb6d5d02" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
